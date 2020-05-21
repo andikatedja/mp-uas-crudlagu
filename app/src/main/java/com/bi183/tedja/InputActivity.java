@@ -30,6 +30,8 @@ import android.widget.Toast;
 import com.bi183.tedja.model.ResponseData;
 import com.bi183.tedja.services.ApiClient;
 import com.bi183.tedja.services.ApiLagu;
+import com.jakewharton.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -55,8 +57,9 @@ public class InputActivity extends AppCompatActivity {
     private Bitmap selectedImage;
     private Spinner spGenre;
     private ProgressDialog progressDialog;
-    private String genre;
+    private String genre, imgName;
     private int id = 0;
+    private boolean update = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,34 @@ public class InputActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> spAdapter = ArrayAdapter.createFromResource(this, R.array.genre, android.R.layout.simple_spinner_item);
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spGenre.setAdapter(spAdapter);
+
+        Intent receivedData = getIntent();
+        Bundle data = receivedData.getExtras();
+        if (data.getString("OPERATION").equals("insert")) {
+            update = false;
+        } else {
+            update = true;
+            id = data.getInt("ID");
+            editJudulLagu.setText(data.getString("JUDUL_LAGU"));
+            editAlbumLagu.setText(data.getString("ALBUM_LAGU"));
+            editArtis.setText(data.getString("ARTIS"));
+            editTahun.setText(data.getString("TAHUN"));
+            editNegara.setText(data.getString("NEGARA"));
+            editPublisher.setText(data.getString("PUBLISHER"));
+            genre = data.getString("GENRE");
+            int spinnerPosition = spAdapter.getPosition(genre);
+            spGenre.setSelection(spinnerPosition);
+            imgName = data.getString("COVER");
+            if (!imgName.equals(null)) {
+                Picasso.Builder builder = new Picasso.Builder(getApplicationContext());
+                builder.downloader(new OkHttp3Downloader(getApplicationContext()));
+                builder.build().load(ApiClient.IMAGE_URL + imgName)
+                        .placeholder(R.drawable.cover_default)
+                        .error(R.drawable.cover_default)
+                        .into(iv_cover);
+            }
+            iv_cover.setContentDescription(imgName);
+        }
 
         iv_cover.setOnClickListener(new View.OnClickListener() {
             @Override
