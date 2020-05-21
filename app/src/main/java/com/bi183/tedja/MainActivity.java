@@ -47,10 +47,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Memuat data lagu");
+        progressDialog.setMessage("Memuat data lagu...");
 
         rvShowLagu = findViewById(R.id.rv_tampil);
 
+        showLagu();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         showLagu();
     }
 

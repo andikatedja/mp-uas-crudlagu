@@ -55,6 +55,8 @@ public class InputActivity extends AppCompatActivity {
     private Bitmap selectedImage;
     private Spinner spGenre;
     private ProgressDialog progressDialog;
+    private String genre;
+    private int id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -21,6 +21,7 @@
             android:id="@+id/iv_cover"
             android:layout_width="192dp"
             android:layout_height="192dp"
+            android:contentDescription="@string/cover"
             app:srcCompat="@drawable/cover_default" />
     </androidx.cardview.widget.CardView>
 

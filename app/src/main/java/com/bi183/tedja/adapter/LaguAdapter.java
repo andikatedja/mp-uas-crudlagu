@@ -1,6 +1,7 @@
 package com.bi183.tedja.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bi183.tedja.InputActivity;
 import com.bi183.tedja.R;
+import com.bi183.tedja.TampilActivity;
 import com.bi183.tedja.model.Lagu;
 import com.bi183.tedja.services.ApiClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
@@ -84,11 +87,32 @@ public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder
 
         @Override
         public void onClick(View v) {
-
+            Intent openLagu = new Intent(context, TampilActivity.class);
+            openLagu.putExtra("JUDUL_LAGU", tvJudulLagu.getText().toString());
+            openLagu.putExtra("ALBUM_LAGU", albumLagu);
+            openLagu.putExtra("ARTIS", tvArtis.getText().toString());
+            openLagu.putExtra("TAHUN", tahun);
+            openLagu.putExtra("NEGARA", negara);
+            openLagu.putExtra("PUBLISHER", publisher);
+            openLagu.putExtra("GENRE", genre);
+            openLagu.putExtra("COVER", iv_cover.getContentDescription());
+            itemView.getContext().startActivity(openLagu);
         }
 
         @Override
         public boolean onLongClick(View v) {
+            Intent openLagu = new Intent(context, InputActivity.class);
+            openLagu.putExtra("OPERATION", "update");
+            openLagu.putExtra("ID", id);
+            openLagu.putExtra("JUDUL_LAGU", tvJudulLagu.getText().toString());
+            openLagu.putExtra("ALBUM_LAGU", albumLagu);
+            openLagu.putExtra("ARTIS", tvArtis.getText().toString());
+            openLagu.putExtra("TAHUN", tahun);
+            openLagu.putExtra("NEGARA", negara);
+            openLagu.putExtra("PUBLISHER", publisher);
+            openLagu.putExtra("GENRE", genre);
+            openLagu.putExtra("COVER", iv_cover.getContentDescription());
+            itemView.getContext().startActivity(openLagu);
             return false;
         }
     }
