@@ -4,12 +4,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.FileUtils;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -21,8 +27,15 @@ import android.widget.Toast;
 import com.bi183.tedja.model.ResponseData;
 import com.bi183.tedja.services.ApiClient;
 import com.bi183.tedja.services.ApiLagu;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -35,11 +48,8 @@ public class InputActivity extends AppCompatActivity {
 
     private EditText editJudulLagu, editAlbumLagu, editArtis, editTahun, editNegara, editPublisher, editGenre;
     private ImageView iv_cover;
-    private Uri cover;
     private Button btnSave;
-    private String imgDecodableString;
-
-    private static final int GALLERY_REQUEST_CODE = 100;
+    private Bitmap selectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +70,10 @@ public class InputActivity extends AppCompatActivity {
         iv_cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
+                pickImage();
+//                Intent intent = new Intent(Intent.ACTION_PICK);
+//                intent.setType("image/*");
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
             }
         });
 
@@ -75,27 +85,31 @@ public class InputActivity extends AppCompatActivity {
         });
     }
 
+    private void pickImage() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1, 1)
+                .start(this);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Result code is RESULT_OK only if the user selects an Image
-        if (resultCode == Activity.RESULT_OK && requestCode == GALLERY_REQUEST_CODE){
-            //data.getData returns the content URI for the selected Image
-            cover = data.getData();
-//            iv_cover.setImageURI(cover);
-
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            // Get the cursor
-            Cursor cursor = getContentResolver().query(cover, filePathColumn, null, null, null);
-            // Move to first row
-            cursor.moveToFirst();
-            //Get the column index of MediaStore.Images.Media.DATA
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            //Gets the String value in the column
-            String imgDecodableString = cursor.getString(columnIndex);
-            cursor.close();
-            // Set the Image in ImageView after decoding the String
-            iv_cover.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                try {
+                    Uri cover = result.getUri();
+                    InputStream imageStream = getContentResolver().openInputStream(cover);
+                    selectedImage = BitmapFactory.decodeStream(imageStream);
+                    iv_cover.setImageBitmap(selectedImage);
+                } catch (FileNotFoundException er) {
+                    er.printStackTrace();
+                    Toast.makeText(this, "Ada kesalahan dalam pemilihan gambar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            Toast.makeText(this, "Anda belum memilih gambar", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -108,13 +122,22 @@ public class InputActivity extends AppCompatActivity {
         String spublisher = editPublisher.getText().toString();
         String sgenre = editGenre.getText().toString();
 
-        String path = getPath(cover);
-        File file = new File(path);
-        // Create a request body with file and image media type
-        RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
-        // Create MultipartBody.Part using file request-body,file name and part name
-        MultipartBody.Part part = MultipartBody.Part.createFormData("cover", file.getName(), fileReqBody);
-        //Create request body with text description and text media type
+        MultipartBody.Part part;
+        //Cek apakah ada gambar yang dipilih
+        if (selectedImage != null) {
+            File file = createTempFile(selectedImage);
+            // Create a request body with file and image media type
+            RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
+            // Create MultipartBody.Part using file request-body,file name and part name
+            part = MultipartBody.Part.createFormData("cover", file.getName(), fileReqBody);
+        } else {
+            // Create a request body with file and image media type
+            RequestBody fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "");
+            // Create MultipartBody.Part using file request-body,file name and part name
+            part = MultipartBody.Part.createFormData("cover", "", fileReqBody);
+        }
+
+        //Create request body with text media type
         RequestBody judul_lagu = RequestBody.create(MediaType.parse("text/plain"), sjudul_lagu);
         RequestBody album_lagu = RequestBody.create(MediaType.parse("text/plain"), salbum_lagu);
         RequestBody artis = RequestBody.create(MediaType.parse("text/plain"), sartis);
@@ -134,7 +157,7 @@ public class InputActivity extends AppCompatActivity {
                 String message = response.body().getMessage();
                 if(value.equals("1")) {
                     Toast.makeText(InputActivity.this, "SUKSES: " + message, Toast.LENGTH_LONG).show();
-//                    finish();
+                    finish();
                 } else{
                     Toast.makeText(InputActivity.this, "GAGAL: " + message, Toast.LENGTH_LONG).show();
                 }
@@ -149,12 +172,23 @@ public class InputActivity extends AppCompatActivity {
         });
     }
 
-    public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        startManagingCursor(cursor);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
+    private File createTempFile(Bitmap bitmap) {
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                , System.currentTimeMillis() +"_image.jpg");
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100, bos);
+        byte[] bitmapdata = bos.toByteArray();
+
+        //write the bytes in file
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }
