@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Daftar Lagu</string>
+    <string name="judul_lagu">Judul Lagu</string>
+    <string name="album_lagu">Album Lagu</string>
+    <string name="artis">Artis</string>
+    <string name="tahun">Tahun Rilis</string>
+    <string name="negara">Asal Negara</string>
+    <string name="publisher">Publisher</string>
+    <string name="genre">Genre</string>
+    <string name="cover">Cover Lagu</string>
+    <string name="btn_simpan">Simpan Lagu</string>
+
+    <string-array name="genre">
+        <item>Pop</item>
+        <item>Rock</item>
+        <item>Metal</item>
+        <item>Jazz</item>
+        <item>Electronic</item>
+    </string-array>
 </resources>

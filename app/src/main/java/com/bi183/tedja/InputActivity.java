@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +20,11 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bi183.tedja.model.ResponseData;
@@ -46,10 +49,12 @@ import retrofit2.Response;
 
 public class InputActivity extends AppCompatActivity {
 
-    private EditText editJudulLagu, editAlbumLagu, editArtis, editTahun, editNegara, editPublisher, editGenre;
+    private EditText editJudulLagu, editAlbumLagu, editArtis, editTahun, editNegara, editPublisher;
     private ImageView iv_cover;
     private Button btnSave;
     private Bitmap selectedImage;
+    private Spinner spGenre;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +69,18 @@ public class InputActivity extends AppCompatActivity {
         editNegara = findViewById(R.id.editNegara);
         editPublisher = findViewById(R.id.editPublisher);
         editJudulLagu = findViewById(R.id.editJudulLagu);
-        editGenre = findViewById(R.id.editGenre);
         btnSave = findViewById(R.id.btnSave);
+        spGenre = findViewById(R.id.spGenre);
+        progressDialog = new ProgressDialog(this);
+
+        ArrayAdapter<CharSequence> spAdapter = ArrayAdapter.createFromResource(this, R.array.genre, android.R.layout.simple_spinner_item);
+        spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spGenre.setAdapter(spAdapter);
 
         iv_cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickImage();
-//                Intent intent = new Intent(Intent.ACTION_PICK);
-//                intent.setType("image/*");
-//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
             }
         });
 
@@ -114,13 +121,8 @@ public class InputActivity extends AppCompatActivity {
     }
 
     private void saveData() {
-        String sjudul_lagu = editJudulLagu.getText().toString();
-        String salbum_lagu = editAlbumLagu.getText().toString();
-        String sartis = editArtis.getText().toString();
-        String stahun = editTahun.getText().toString();
-        String snegara = editNegara.getText().toString();
-        String spublisher = editPublisher.getText().toString();
-        String sgenre = editGenre.getText().toString();
+        progressDialog.setMessage("Menyimpan lagu...");
+        progressDialog.show();
 
         MultipartBody.Part part;
         //Cek apakah ada gambar yang dipilih
@@ -138,13 +140,13 @@ public class InputActivity extends AppCompatActivity {
         }
 
         //Create request body with text media type
-        RequestBody judul_lagu = RequestBody.create(MediaType.parse("text/plain"), sjudul_lagu);
-        RequestBody album_lagu = RequestBody.create(MediaType.parse("text/plain"), salbum_lagu);
-        RequestBody artis = RequestBody.create(MediaType.parse("text/plain"), sartis);
-        RequestBody tahun = RequestBody.create(MediaType.parse("text/plain"), stahun);
-        RequestBody negara = RequestBody.create(MediaType.parse("text/plain"), snegara);
-        RequestBody publisher = RequestBody.create(MediaType.parse("text/plain"), spublisher);
-        RequestBody genre = RequestBody.create(MediaType.parse("text/plain"), sgenre);
+        RequestBody judul_lagu = RequestBody.create(MediaType.parse("text/plain"), editJudulLagu.getText().toString());
+        RequestBody album_lagu = RequestBody.create(MediaType.parse("text/plain"), editAlbumLagu.getText().toString());
+        RequestBody artis = RequestBody.create(MediaType.parse("text/plain"), editArtis.getText().toString());
+        RequestBody tahun = RequestBody.create(MediaType.parse("text/plain"), editTahun.getText().toString());
+        RequestBody negara = RequestBody.create(MediaType.parse("text/plain"), editNegara.getText().toString());
+        RequestBody publisher = RequestBody.create(MediaType.parse("text/plain"), editPublisher.getText().toString());
+        RequestBody genre = RequestBody.create(MediaType.parse("text/plain"), spGenre.getSelectedItem().toString());
 
         ApiLagu api = ApiClient.getRetrofitInstance().create(ApiLagu.class);
         Call<ResponseData> call;
@@ -153,6 +155,7 @@ public class InputActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+                progressDialog.dismiss();
                 String value = response.body().getValue();
                 String message = response.body().getMessage();
                 if(value.equals("1")) {
@@ -165,6 +168,7 @@ public class InputActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseData> call, Throwable t) {
+                progressDialog.dismiss();
                 Toast.makeText(InputActivity.this, "Gagal menghubungi server...", Toast.LENGTH_LONG).show();
                 t.printStackTrace();
                 Log.d("Input Data Error", t.toString());
