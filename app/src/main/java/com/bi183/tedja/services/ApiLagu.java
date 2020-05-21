@@ -26,4 +26,7 @@ public interface ApiLagu {
             @Part("genre") RequestBody genre,
             @Part MultipartBody.Part cover
     );
+
+    @GET("getdata.php")
+    Call<ResponseData> getData();
 }
