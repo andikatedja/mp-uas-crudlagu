@@ -61,7 +61,7 @@ public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataLagu.size();
     }
 
     public class LaguViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
