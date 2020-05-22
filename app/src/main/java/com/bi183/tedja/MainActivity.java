@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -32,12 +33,22 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private List<Lagu> dataLagu = new ArrayList<>();
     private FloatingActionButton fab;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshLagu();
+                laguAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         fab = findViewById(R.id.fab_tambah);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +80,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    private void refreshLagu() {
+        ApiLagu api = ApiClient.getRetrofitInstance().create(ApiLagu.class);
+        Call<ResponseData> call = api.getData();
+
+        call.enqueue(new Callback<ResponseData>() {
+            @Override
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+                String value = response.body().getValue();
+                if (value.equals("1")) {
+                    dataLagu = response.body().getResult();
+                    laguAdapter = new LaguAdapter(dataLagu, getApplicationContext());
+//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+//                    rvShowLagu.setLayoutManager(layoutManager);
+//                    rvShowLagu.setAdapter(laguAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData> call, Throwable t) {
+
+            }
+        });
     }
 
     private void showLagu() {
