@@ -1,9 +1,11 @@
 package com.bi183.tedja;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +22,8 @@ public class TampilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tampil);
+
+        getSupportActionBar().setTitle("Detail Lagu");
 
         ivCover = findViewById(R.id.iv_cover);
         tvJudulLagu = findViewById(R.id.tvJudulLagu);
@@ -50,4 +54,5 @@ public class TampilActivity extends AppCompatActivity {
         }
         ivCover.setContentDescription(imgName);
     }
+
 }
