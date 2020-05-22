@@ -3,6 +3,7 @@ package com.bi183.tedja;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -12,7 +13,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 
 import com.bi183.tedja.adapter.LaguAdapter;
 import com.bi183.tedja.model.Lagu;
@@ -48,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab_tambah);
         progressDialog = new ProgressDialog(this);
 
-        progressDialog.setMessage("Memuat lagu...");
-        showLagu();
+//        progressDialog.setMessage("Memuat lagu...");
+//        showLagu();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -67,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(openInput, 1);
             }
         });
+
+        if (savedInstanceState == null) {
+            progressDialog.setMessage("Memuat lagu...");
+            showLagu();
+        }
     }
 
     @Override
@@ -82,6 +92,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                laguAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override

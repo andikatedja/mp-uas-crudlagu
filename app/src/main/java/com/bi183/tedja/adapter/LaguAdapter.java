@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,18 +23,21 @@ import com.bi183.tedja.services.ApiClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Callback;
 
-public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder> {
+public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder> implements Filterable {
 
     private List<Lagu> dataLagu;
+    private List<Lagu> dataLaguFull;
     private Context context;
 
     public LaguAdapter(List<Lagu> dataLagu, Context context) {
         this.dataLagu = dataLagu;
         this.context = context;
+        this.dataLaguFull = new ArrayList<>(dataLagu);
     }
 
     @NonNull
@@ -71,6 +76,42 @@ public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder
     public int getItemCount() {
         return dataLagu.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return laguFilter;
+    }
+
+    private Filter laguFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Lagu> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(dataLaguFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Lagu lagu : dataLaguFull) {
+                    if (lagu.getJudul_lagu().toLowerCase().contains(filterPattern) || lagu.getArtis().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(lagu);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            dataLagu.clear();
+            dataLagu.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class LaguViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 

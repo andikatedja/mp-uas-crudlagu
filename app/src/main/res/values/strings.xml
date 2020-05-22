@@ -10,6 +10,7 @@
     <string name="cover">Cover Lagu</string>
     <string name="btn_simpan">Simpan Lagu</string>
     <string name="delete">Hapus Lagu</string>
+    <string name="search">Cari Lagu</string>
 
     <string-array name="genre">
         <item>Pop</item>
