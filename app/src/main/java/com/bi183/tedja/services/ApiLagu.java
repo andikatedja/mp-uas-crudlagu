@@ -27,6 +27,20 @@ public interface ApiLagu {
             @Part MultipartBody.Part cover
     );
 
+    @Multipart
+    @POST("update.php")
+    Call<ResponseData> updateData(
+            @Part("id") RequestBody id,
+            @Part("judul_lagu") RequestBody judul_lagu,
+            @Part("album_lagu") RequestBody album_lagu,
+            @Part("artis") RequestBody artis,
+            @Part("tahun") RequestBody tahun,
+            @Part("negara") RequestBody negara,
+            @Part("publisher") RequestBody publisher,
+            @Part("genre") RequestBody genre,
+            @Part MultipartBody.Part cover
+    );
+
     @GET("getdata.php")
     Call<ResponseData> getData();
 }

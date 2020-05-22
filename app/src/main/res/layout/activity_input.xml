@@ -31,65 +31,83 @@
                 app:srcCompat="@drawable/cover_default" />
         </androidx.cardview.widget.CardView>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editJudulLagu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_margin"
-            android:ems="10"
-            android:hint="@string/judul_lagu"
-            android:inputType="textPersonName"
-            android:autofillHints="@string/judul_lagu" />
+            app:errorEnabled="true"
+            android:layout_margin="@dimen/medium_margin">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/judul_lagu"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editAlbumLagu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_margin"
-            android:ems="10"
-            android:hint="@string/album_lagu"
-            android:inputType="textPersonName"
-            android:autofillHints="@string/album_lagu" />
+            app:errorEnabled="true"
+            android:layout_margin="@dimen/medium_margin">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/album_lagu"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editArtis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_margin"
-            android:ems="10"
-            android:hint="@string/artis"
-            android:inputType="textPersonName"
-            android:autofillHints="@string/artis"/>
+            app:errorEnabled="true"
+            android:layout_margin="@dimen/medium_margin">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/artis"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editTahun"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_margin"
-            android:ems="10"
-            android:hint="@string/tahun"
-            android:inputType="number"
-            android:autofillHints="@string/tahun"/>
+            app:errorEnabled="true"
+            android:layout_margin="@dimen/medium_margin">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/tahun"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editNegara"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_margin"
-            android:ems="10"
-            android:hint="@string/negara"
-            android:inputType="textPersonName"
-            android:autofillHints="@string/negara"/>
+            app:errorEnabled="true"
+            android:layout_margin="@dimen/medium_margin">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/negara"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editPublisher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_margin"
-            android:ems="10"
-            android:hint="@string/publisher"
-            android:inputType="textPersonName"
-            android:autofillHints="@string/publisher"/>
+            app:errorEnabled="true"
+            android:layout_margin="@dimen/medium_margin">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/publisher"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

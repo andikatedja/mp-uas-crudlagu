@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.bi183.tedja.model.ResponseData;
 import com.bi183.tedja.services.ApiClient;
 import com.bi183.tedja.services.ApiLagu;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -51,7 +52,7 @@ import retrofit2.Response;
 
 public class InputActivity extends AppCompatActivity {
 
-    private EditText editJudulLagu, editAlbumLagu, editArtis, editTahun, editNegara, editPublisher;
+    private TextInputLayout editJudulLagu, editAlbumLagu, editArtis, editTahun, editNegara, editPublisher;
     private ImageView iv_cover;
     private Button btnSave;
     private Bitmap selectedImage;
@@ -89,12 +90,12 @@ public class InputActivity extends AppCompatActivity {
         } else {
             update = true;
             id = data.getInt("ID");
-            editJudulLagu.setText(data.getString("JUDUL_LAGU"));
-            editAlbumLagu.setText(data.getString("ALBUM_LAGU"));
-            editArtis.setText(data.getString("ARTIS"));
-            editTahun.setText(data.getString("TAHUN"));
-            editNegara.setText(data.getString("NEGARA"));
-            editPublisher.setText(data.getString("PUBLISHER"));
+            editJudulLagu.getEditText().setText(data.getString("JUDUL_LAGU"));
+            editAlbumLagu.getEditText().setText(data.getString("ALBUM_LAGU"));
+            editArtis.getEditText().setText(data.getString("ARTIS"));
+            editTahun.getEditText().setText(data.getString("TAHUN"));
+            editNegara.getEditText().setText(data.getString("NEGARA"));
+            editPublisher.getEditText().setText(data.getString("PUBLISHER"));
             genre = data.getString("GENRE");
             int spinnerPosition = spAdapter.getPosition(genre);
             spGenre.setSelection(spinnerPosition);
@@ -157,33 +158,55 @@ public class InputActivity extends AppCompatActivity {
         progressDialog.setMessage("Menyimpan lagu...");
         progressDialog.show();
 
-        MultipartBody.Part part;
-        //Cek apakah ada gambar yang dipilih
-        if (selectedImage != null) {
-            File file = createTempFile(selectedImage);
-            // Create a request body with file and image media type
-            RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
-            // Create MultipartBody.Part using file request-body,file name and part name
-            part = MultipartBody.Part.createFormData("cover", file.getName(), fileReqBody);
-        } else {
-            // Create a request body with file and image media type
-            RequestBody fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "");
-            // Create MultipartBody.Part using file request-body,file name and part name
-            part = MultipartBody.Part.createFormData("cover", "", fileReqBody);
-        }
-
         //Create request body with text media type
-        RequestBody judul_lagu = RequestBody.create(MediaType.parse("text/plain"), editJudulLagu.getText().toString());
-        RequestBody album_lagu = RequestBody.create(MediaType.parse("text/plain"), editAlbumLagu.getText().toString());
-        RequestBody artis = RequestBody.create(MediaType.parse("text/plain"), editArtis.getText().toString());
-        RequestBody tahun = RequestBody.create(MediaType.parse("text/plain"), editTahun.getText().toString());
-        RequestBody negara = RequestBody.create(MediaType.parse("text/plain"), editNegara.getText().toString());
-        RequestBody publisher = RequestBody.create(MediaType.parse("text/plain"), editPublisher.getText().toString());
+        RequestBody judul_lagu = RequestBody.create(MediaType.parse("text/plain"), editJudulLagu.getEditText().getText().toString());
+        RequestBody album_lagu = RequestBody.create(MediaType.parse("text/plain"), editAlbumLagu.getEditText().getText().toString());
+        RequestBody artis = RequestBody.create(MediaType.parse("text/plain"), editArtis.getEditText().getText().toString());
+        RequestBody tahun = RequestBody.create(MediaType.parse("text/plain"), editTahun.getEditText().getText().toString());
+        RequestBody negara = RequestBody.create(MediaType.parse("text/plain"), editNegara.getEditText().getText().toString());
+        RequestBody publisher = RequestBody.create(MediaType.parse("text/plain"), editPublisher.getEditText().getText().toString());
         RequestBody genre = RequestBody.create(MediaType.parse("text/plain"), spGenre.getSelectedItem().toString());
 
+        MultipartBody.Part part;
         ApiLagu api = ApiClient.getRetrofitInstance().create(ApiLagu.class);
         Call<ResponseData> call;
-        call = api.addData(judul_lagu, album_lagu, artis, tahun, negara, publisher, genre, part);
+        //Cek apakah update atau insert
+        if (!update) {
+            //Cek apakah ada gambar yang dipilih
+            if (selectedImage != null) {
+                File file = createTempFile(selectedImage);
+                // Create a request body with file and image media type
+                RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
+                // Create MultipartBody.Part using file request-body,file name and part name
+                part = MultipartBody.Part.createFormData("cover", file.getName(), fileReqBody);
+                call = api.addData(judul_lagu, album_lagu, artis, tahun, negara, publisher, genre, part);
+            } else {
+                // Create a request body with file and image media type
+                RequestBody fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "");
+                // Create MultipartBody.Part using file request-body,file name and part name
+                part = MultipartBody.Part.createFormData("cover", "", fileReqBody);
+                call = api.addData(judul_lagu, album_lagu, artis, tahun, negara, publisher, genre, part);
+            }
+        } else {
+            //Jika update true
+            //Cek apakah ada gambar yang dipilih
+            if (selectedImage != null) {
+                RequestBody id_lagu = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(id));
+                File file = createTempFile(selectedImage);
+                // Create a request body with file and image media type
+                RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
+                // Create MultipartBody.Part using file request-body,file name and part name
+                part = MultipartBody.Part.createFormData("cover", file.getName(), fileReqBody);
+                call = api.updateData(id_lagu, judul_lagu, album_lagu, artis, tahun, negara, publisher, genre, part);
+            } else {
+                RequestBody id_lagu = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(id));
+                // Create a request body with file and image media type
+                RequestBody fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "");
+                // Create MultipartBody.Part using file request-body,file name and part name
+                part = MultipartBody.Part.createFormData("cover", "", fileReqBody);
+                call = api.updateData(id_lagu, judul_lagu, album_lagu, artis, tahun, negara, publisher, genre, part);
+            }
+        }
 
         call.enqueue(new Callback<ResponseData>() {
             @Override
