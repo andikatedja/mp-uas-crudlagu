@@ -92,9 +92,9 @@ public class InputActivity extends AppCompatActivity {
         Bundle data = receivedData.getExtras();
         if (data.getString("OPERATION").equals("insert")) {
             update = false;
-            getActionBar().setTitle("Tambah Lagu Baru");
+            getSupportActionBar().setTitle("Tambah Lagu Baru");
         } else {
-            getActionBar().setTitle("Update Lagu");
+            getSupportActionBar().setTitle("Update Lagu");
             update = true;
             id = data.getInt("ID");
             editJudulLagu.getEditText().setText(data.getString("JUDUL_LAGU"));
