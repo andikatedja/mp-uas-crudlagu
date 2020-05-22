@@ -92,7 +92,9 @@ public class InputActivity extends AppCompatActivity {
         Bundle data = receivedData.getExtras();
         if (data.getString("OPERATION").equals("insert")) {
             update = false;
+            getActionBar().setTitle("Tambah Lagu Baru");
         } else {
+            getActionBar().setTitle("Update Lagu");
             update = true;
             id = data.getInt("ID");
             editJudulLagu.getEditText().setText(data.getString("JUDUL_LAGU"));
@@ -141,7 +143,7 @@ public class InputActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.menu_item_delete);
 
-        if(update==true) {
+        if(update) {
             menuItem.setEnabled(true);
             menuItem.getIcon().setAlpha(255);
         } else{
