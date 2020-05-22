@@ -43,4 +43,10 @@ public interface ApiLagu {
 
     @GET("getdata.php")
     Call<ResponseData> getData();
+
+    @FormUrlEncoded
+    @POST("delete.php")
+    Call<ResponseData> deleteData(
+            @Field("id") String id
+    );
 }

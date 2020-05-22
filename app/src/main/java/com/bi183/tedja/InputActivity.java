@@ -1,12 +1,15 @@
 package com.bi183.tedja;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -19,6 +22,8 @@ import android.os.FileUtils;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -124,6 +129,37 @@ public class InputActivity extends AppCompatActivity {
                 saveData();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_input, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.menu_item_delete);
+
+        if(update==true) {
+            menuItem.setEnabled(true);
+            menuItem.getIcon().setAlpha(255);
+        } else{
+            menuItem.setEnabled(false);
+            menuItem.getIcon().setAlpha(0);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_item_delete) {
+            confirmDeleteData();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void pickImage() {
@@ -250,5 +286,57 @@ public class InputActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return file;
+    }
+
+    private void confirmDeleteData() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Konfirmasi Delete Lagu");
+        builder.setMessage("Apakah anda yakin ingin menghapus lagu?")
+                .setCancelable(false)
+                .setPositiveButton("Hapus", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteData();
+                    }
+                }).setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteData() {
+        progressDialog.setMessage("Menghapus lagu...");
+        progressDialog.show();
+
+        ApiLagu api = ApiClient.getRetrofitInstance().create(ApiLagu.class);
+        Call<ResponseData> call = api.deleteData(String.valueOf(id));
+        call.enqueue(new Callback<ResponseData>() {
+            @Override
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+                String value = response.body().getValue();
+                String message = response.body().getMessage();
+                progressDialog.dismiss();
+
+                if(value.equals("1")) {
+                    Toast.makeText(InputActivity.this, "SUKSES: " + message, Toast.LENGTH_LONG).show();
+                } else{
+                    Toast.makeText(InputActivity.this, "GAGAL: " + message, Toast.LENGTH_LONG).show();
+                }
+
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(InputActivity.this, "Gagal menghubungi server...", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+                Log.d("Delete Lagu Error", t.toString());
+            }
+        });
     }
 }

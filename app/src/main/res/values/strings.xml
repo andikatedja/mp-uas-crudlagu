@@ -9,6 +9,7 @@
     <string name="genre">Genre</string>
     <string name="cover">Cover Lagu</string>
     <string name="btn_simpan">Simpan Lagu</string>
+    <string name="delete">Hapus Lagu</string>
 
     <string-array name="genre">
         <item>Pop</item>
