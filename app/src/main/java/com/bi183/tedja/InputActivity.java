@@ -252,6 +252,8 @@ public class InputActivity extends AppCompatActivity {
                 String message = response.body().getMessage();
                 if(value.equals("1")) {
                     Toast.makeText(InputActivity.this, "SUKSES: " + message, Toast.LENGTH_LONG).show();
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 } else{
                     Toast.makeText(InputActivity.this, "GAGAL: " + message, Toast.LENGTH_LONG).show();
@@ -323,11 +325,13 @@ public class InputActivity extends AppCompatActivity {
 
                 if(value.equals("1")) {
                     Toast.makeText(InputActivity.this, "SUKSES: " + message, Toast.LENGTH_LONG).show();
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
                 } else{
                     Toast.makeText(InputActivity.this, "GAGAL: " + message, Toast.LENGTH_LONG).show();
                 }
 
-                finish();
             }
 
             @Override

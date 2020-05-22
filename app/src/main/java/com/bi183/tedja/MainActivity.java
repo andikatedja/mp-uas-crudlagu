@@ -1,11 +1,13 @@
 package com.bi183.tedja;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,37 +36,37 @@ public class MainActivity extends AppCompatActivity {
     private List<Lagu> dataLagu = new ArrayList<>();
     private FloatingActionButton fab;
     private SwipeRefreshLayout swipeRefreshLayout;
+    RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        rvShowLagu = findViewById(R.id.rv_tampil);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        fab = findViewById(R.id.fab_tambah);
+        progressDialog = new ProgressDialog(this);
+
+        progressDialog.setMessage("Memuat lagu...");
+        showLagu();
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshLagu();
-                laguAdapter.notifyDataSetChanged();
+                showLagu();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-        fab = findViewById(R.id.fab_tambah);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent openInput = new Intent(getApplicationContext(), InputActivity.class);
                 openInput.putExtra("OPERATION", "insert");
-                startActivity(openInput);
+                startActivityForResult(openInput, 1);
             }
         });
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Memuat data lagu...");
-
-        rvShowLagu = findViewById(R.id.rv_tampil);
-
-        showLagu();
     }
 
     @Override
@@ -82,28 +84,14 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    private void refreshLagu() {
-        ApiLagu api = ApiClient.getRetrofitInstance().create(ApiLagu.class);
-        Call<ResponseData> call = api.getData();
-
-        call.enqueue(new Callback<ResponseData>() {
-            @Override
-            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                String value = response.body().getValue();
-                if (value.equals("1")) {
-                    dataLagu = response.body().getResult();
-                    laguAdapter = new LaguAdapter(dataLagu, getApplicationContext());
-//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-//                    rvShowLagu.setLayoutManager(layoutManager);
-//                    rvShowLagu.setAdapter(laguAdapter);
-                }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                showLagu();
             }
-
-            @Override
-            public void onFailure(Call<ResponseData> call, Throwable t) {
-
-            }
-        });
+        }
     }
 
     private void showLagu() {
@@ -118,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 if (value.equals("1")) {
                     dataLagu = response.body().getResult();
                     laguAdapter = new LaguAdapter(dataLagu, getApplicationContext());
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+                    layoutManager = new LinearLayoutManager(MainActivity.this);
                     rvShowLagu.setLayoutManager(layoutManager);
                     rvShowLagu.setAdapter(laguAdapter);
                 }

@@ -1,5 +1,6 @@
 package com.bi183.tedja.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,11 +16,14 @@ import com.bi183.tedja.InputActivity;
 import com.bi183.tedja.R;
 import com.bi183.tedja.TampilActivity;
 import com.bi183.tedja.model.Lagu;
+import com.bi183.tedja.model.ResponseData;
 import com.bi183.tedja.services.ApiClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import retrofit2.Callback;
 
 public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder> {
 
@@ -34,6 +38,7 @@ public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder
     @NonNull
     @Override
     public LaguViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.list_lagu, parent, false);
         return new LaguViewHolder(view);
@@ -112,7 +117,7 @@ public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder
             openLagu.putExtra("PUBLISHER", publisher);
             openLagu.putExtra("GENRE", genre);
             openLagu.putExtra("COVER", iv_cover.getContentDescription());
-            itemView.getContext().startActivity(openLagu);
+            ((Activity) context).startActivityForResult(openLagu, 1);
             return false;
         }
     }
