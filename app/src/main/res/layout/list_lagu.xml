@@ -9,6 +9,7 @@
     app:cardElevation="2dp"
     app:cardUseCompatPadding="false"
     android:clickable="true"
+    android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
@@ -27,6 +28,7 @@
                 android:id="@+id/iv_cover"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
+                android:contentDescription="@string/cover"
                 app:srcCompat="@drawable/cover_default" />
         </androidx.cardview.widget.CardView>
 
