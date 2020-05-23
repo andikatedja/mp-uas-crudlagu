@@ -12,15 +12,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/large_margin"
+        android:layout_marginTop="@dimen/xtra_large_margin"
         android:layout_marginBottom="@dimen/large_margin"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp">
 
         <ImageView
             android:id="@+id/iv_cover"
-            android:layout_width="192dp"
-            android:layout_height="192dp"
+            android:layout_width="256dp"
+            android:layout_height="256dp"
             android:contentDescription="@string/cover"
             app:srcCompat="@drawable/cover_default" />
     </androidx.cardview.widget.CardView>
