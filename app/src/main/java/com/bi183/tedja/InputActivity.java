@@ -193,6 +193,10 @@ public class InputActivity extends AppCompatActivity {
     }
 
     private void saveData() {
+        //Validasi
+        if (!validateJudul() | !validateAlbum() | !validateArtis() | !validateTahun() | !validateNegara() | !validatePublisher()) {
+            return;
+        }
         progressDialog.setMessage("Menyimpan lagu...");
         progressDialog.show();
 
@@ -344,5 +348,83 @@ public class InputActivity extends AppCompatActivity {
                 Log.d("Delete Lagu Error", t.toString());
             }
         });
+    }
+
+    //Validasi TextInput Judul
+    private boolean validateJudul() {
+        String judul = editJudulLagu.getEditText().getText().toString().trim();
+
+        if (judul.isEmpty()) {
+            editJudulLagu.setError("Field judul harus diisi");
+            return false;
+        } else {
+            editJudulLagu.setError(null);
+            return true;
+        }
+    }
+
+    //Validasi TextInput Album
+    private boolean validateAlbum() {
+        String album = editAlbumLagu.getEditText().getText().toString().trim();
+
+        if (album.isEmpty()) {
+            editAlbumLagu.setError("Field album harus diisi");
+            return false;
+        } else {
+            editAlbumLagu.setError(null);
+            return true;
+        }
+    }
+
+    //Validasi TextInput Artis
+    private boolean validateArtis() {
+        String artis = editArtis.getEditText().getText().toString().trim();
+
+        if (artis.isEmpty()) {
+            editArtis.setError("Field artis harus diisi");
+            return false;
+        } else {
+            editArtis.setError(null);
+            return true;
+        }
+    }
+
+    //Validasi TextInput Tahun
+    private boolean validateTahun() {
+        String tahun = editTahun.getEditText().getText().toString().trim();
+
+        if (tahun.isEmpty()) {
+            editTahun.setError("Field tahun harus diisi");
+            return false;
+        } else {
+            editTahun.setError(null);
+            return true;
+        }
+    }
+
+    //Validasi TextInput Negara
+    private boolean validateNegara() {
+        String negara = editNegara.getEditText().getText().toString().trim();
+
+        if (negara.isEmpty()) {
+            editNegara.setError("Field negara harus diisi");
+            return false;
+        } else {
+            editNegara.setError(null);
+            return true;
+        }
+    }
+
+    //Validasi TextInput Publisher
+    private boolean validatePublisher() {
+        String publisher = editPublisher.getEditText().getText().toString().trim();
+
+        if (publisher.isEmpty()) {
+            editPublisher.setError("Field publisher harus diisi");
+            return false;
+        } else {
+            editPublisher.setError(null);
+            return true;
+        }
     }
 }
