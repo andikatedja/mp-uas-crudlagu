@@ -4,20 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/medium_margin"
     android:orientation="vertical"
     tools:context=".InputActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginEnd="@dimen/large_margin"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/large_margin"
+            android:layout_marginTop="@dimen/xtra_large_margin"
             android:layout_marginBottom="@dimen/large_margin"
             app:cardCornerRadius="8dp"
             app:cardPreventCornerOverlap="false"
@@ -35,79 +36,85 @@
             android:id="@+id/editJudulLagu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            android:layout_margin="@dimen/medium_margin">
+            android:layout_margin="@dimen/medium_margin"
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/judul_lagu"
-                android:inputType="text"/>
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editAlbumLagu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            android:layout_margin="@dimen/medium_margin">
+            android:layout_margin="@dimen/medium_margin"
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/album_lagu"
-                android:inputType="text"/>
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editArtis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            android:layout_margin="@dimen/medium_margin">
+            android:layout_margin="@dimen/medium_margin"
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/artis"
-                android:inputType="text"/>
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editTahun"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            android:layout_margin="@dimen/medium_margin">
+            android:layout_margin="@dimen/medium_margin"
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/tahun"
                 android:inputType="number"
-                android:maxLength="4"/>
+                android:maxLength="4" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editNegara"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            android:layout_margin="@dimen/medium_margin">
+            android:layout_margin="@dimen/medium_margin"
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/negara"
-                android:inputType="text"/>
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editPublisher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            android:layout_margin="@dimen/medium_margin">
+            android:layout_margin="@dimen/medium_margin"
+            app:errorEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/publisher"
-                android:inputType="text"/>
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -136,11 +143,16 @@
 
         <Button
             android:id="@+id/btnSave"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/large_margin"
-            android:text="@string/btn_simpan" />
+            android:layout_marginBottom="@dimen/xtra_large_margin"
+            android:paddingLeft="@dimen/large_margin"
+            android:paddingRight="@dimen/large_margin"
+            android:text="@string/btn_simpan"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

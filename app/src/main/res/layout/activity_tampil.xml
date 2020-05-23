@@ -29,6 +29,7 @@
         android:id="@+id/tvJudulLagu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito"
         android:gravity="center"
         android:text="@string/judul_lagu"
         android:textColor="@android:color/black"
@@ -68,7 +69,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/medium_margin"
                     android:layout_marginBottom="2dp"
-                    android:text="@string/album_lagu" />
+                    android:text="@string/album_lagu"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvAlbumLagu"
@@ -77,14 +79,15 @@
                     android:layout_marginBottom="@dimen/large_margin"
                     android:text="@string/album_lagu"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textView10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:text="@string/tahun" />
+                    android:text="@string/tahun"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvTahun"
@@ -93,14 +96,15 @@
                     android:layout_marginBottom="@dimen/large_margin"
                     android:text="@string/tahun"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textView11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:text="@string/negara" />
+                    android:text="@string/negara"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvNegara"
@@ -109,14 +113,15 @@
                     android:layout_marginBottom="@dimen/large_margin"
                     android:text="@string/negara"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textView12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:text="@string/publisher" />
+                    android:text="@string/publisher"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvPublisher"
@@ -125,14 +130,15 @@
                     android:layout_marginBottom="@dimen/large_margin"
                     android:text="@string/publisher"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textView13"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:text="@string/genre" />
+                    android:text="@string/genre"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvGenre"
@@ -141,7 +147,7 @@
                     android:layout_marginBottom="@dimen/large_margin"
                     android:text="@string/genre"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>

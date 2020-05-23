@@ -157,9 +157,15 @@ public class InputActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.menu_item_delete) {
-            confirmDeleteData();
-            return true;
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            case R.id.menu_item_delete:
+                confirmDeleteData();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
