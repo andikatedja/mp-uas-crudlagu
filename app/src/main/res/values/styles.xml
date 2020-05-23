@@ -6,6 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="actionBarStyle">@style/AppTheme.MyActionBar</item>
+    </style>
+    
+    <style name="AppTheme.MyActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="titleTextStyle">@style/AppTheme.MyActionBar.TitleTextStyle</item>
+    </style>
+    
+    <style name="AppTheme.MyActionBar.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/nunito</item>
     </style>
 
 </resources>
