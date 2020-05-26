@@ -1,6 +1,5 @@
 package com.bi183.tedja;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -12,7 +11,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab_tambah);
         progressDialog = new ProgressDialog(this);
 
-//        progressDialog.setMessage("Memuat lagu...");
-//        showLagu();
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -77,21 +72,6 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.setMessage("Memuat lagu...");
             showLagu();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

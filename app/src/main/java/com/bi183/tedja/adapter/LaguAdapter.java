@@ -18,15 +18,12 @@ import com.bi183.tedja.InputActivity;
 import com.bi183.tedja.R;
 import com.bi183.tedja.TampilActivity;
 import com.bi183.tedja.model.Lagu;
-import com.bi183.tedja.model.ResponseData;
 import com.bi183.tedja.services.ApiClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Callback;
 
 public class LaguAdapter extends RecyclerView.Adapter<LaguAdapter.LaguViewHolder> implements Filterable {
 

@@ -7,27 +7,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.FileUtils;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -225,13 +217,14 @@ public class InputActivity extends AppCompatActivity {
                 File file = createTempFile(selectedImage);
                 // Create a request body with file and image media type
                 RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
-                // Create MultipartBody.Part using file request-body,file name and part name
+                // Create MultipartBody.Part using file request-body, file name and part name
                 part = MultipartBody.Part.createFormData("cover", file.getName(), fileReqBody);
                 call = api.addData(judul_lagu, album_lagu, artis, tahun, negara, publisher, genre, part);
             } else {
-                // Create a request body with file and image media type
+                // Jika tidak ada gambar yang dipilih
+                // Create a request body with text type
                 RequestBody fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "");
-                // Create MultipartBody.Part using file request-body,file name and part name
+                // Create MultipartBody.Part using file request-body, file name and part name
                 part = MultipartBody.Part.createFormData("cover", "", fileReqBody);
                 call = api.addData(judul_lagu, album_lagu, artis, tahun, negara, publisher, genre, part);
             }
@@ -247,8 +240,9 @@ public class InputActivity extends AppCompatActivity {
                 part = MultipartBody.Part.createFormData("cover", file.getName(), fileReqBody);
                 call = api.updateData(id_lagu, judul_lagu, album_lagu, artis, tahun, negara, publisher, genre, part);
             } else {
+                // Jika tidak ada gambar dipilih
                 RequestBody id_lagu = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(id));
-                // Create a request body with file and image media type
+                // Create a request body with text type
                 RequestBody fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "");
                 // Create MultipartBody.Part using file request-body,file name and part name
                 part = MultipartBody.Part.createFormData("cover", "", fileReqBody);
@@ -343,7 +337,6 @@ public class InputActivity extends AppCompatActivity {
                 } else{
                     Toast.makeText(InputActivity.this, "GAGAL: " + message, Toast.LENGTH_LONG).show();
                 }
-
             }
 
             @Override
