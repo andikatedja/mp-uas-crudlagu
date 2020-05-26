@@ -186,7 +186,7 @@ public class InputActivity extends AppCompatActivity {
                 try {
                     Uri cover = result.getUri();
                     InputStream imageStream = getContentResolver().openInputStream(cover);
-                    selectedImage = BitmapFactory.decodeStream(imageStream);
+                    selectedImage = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(imageStream), 512, 512, true);
                     iv_cover.setImageBitmap(selectedImage);
                 } catch (FileNotFoundException er) {
                     er.printStackTrace();
@@ -286,8 +286,8 @@ public class InputActivity extends AppCompatActivity {
         File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 , System.currentTimeMillis() +"_image.jpg");
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,90, bos);
 
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100, bos);
         byte[] bitmapdata = bos.toByteArray();
 
         //write the bytes in file
