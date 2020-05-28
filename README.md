@@ -8,4 +8,4 @@ app/src/main/java/com/bi183/tedja/services/ApiClient.java
 ```
 
 ## Preview Aplikasi
-Preview aplikasi dapat dilihat pada youtube
+Preview aplikasi dapat dilihat pada youtube : [Aplikasi Android CRUD Daftar Lagu](https://youtu.be/7faASP4qDjc)
