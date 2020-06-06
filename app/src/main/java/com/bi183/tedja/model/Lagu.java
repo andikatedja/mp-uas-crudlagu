@@ -1,5 +1,7 @@
 package com.bi183.tedja.model;
 
+import android.text.Html;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Lagu {
@@ -40,15 +42,15 @@ public class Lagu {
     }
 
     public String getJudul_lagu() {
-        return judul_lagu;
+        return Html.fromHtml(judul_lagu).toString();
     }
 
     public String getAlbum_lagu() {
-        return album_lagu;
+        return Html.fromHtml(album_lagu).toString();
     }
 
     public String getArtis() {
-        return artis;
+        return Html.fromHtml(artis).toString();
     }
 
     public String getTahun() {
@@ -56,15 +58,15 @@ public class Lagu {
     }
 
     public String getNegara() {
-        return negara;
+        return Html.fromHtml(negara).toString();
     }
 
     public String getPublisher() {
-        return publisher;
+        return Html.fromHtml(publisher).toString();
     }
 
     public String getGenre() {
-        return genre;
+        return Html.fromHtml(genre).toString();
     }
 
     public String getCover() {
